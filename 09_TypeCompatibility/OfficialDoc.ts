@@ -69,8 +69,46 @@ baseyCallback((e: Childy) => {
   console.log('childy');
 })
 // Childy would normally require at least all three properties id,
-//name, email but as target parameter(Childy) is assignable to source
-//paramemter Basey it is ok.
+//name, email but as target parameter(Basey) is assignable to source
+//paramemter(Childy) it is ok.
 childyCallback((e: Basey) => {
   console.log('basey');
 })
+
+
+//====================================================
+//  Optional Parameters and Rest parameters
+//====================================================
+// * optional and required parameters are type compatible
+interface OptionalArgFunc {
+  (optionalX?: string): void;
+}
+var optionaly: OptionalArgFunc = (requiredX: string): void => {
+}
+interface RequiredArgFunc {
+  (requiredY: string): void;
+}
+var requiredy: RequiredArgFunc = (optionalY?: string):void => {
+}
+
+// extra optional parameters of the source type are not an error
+interface ExtraSourceArg {
+  (requiredX1: string, requiredX2: string, extraOptionalX?: string): void
+}
+var extraSourceArg: ExtraSourceArg = (y: string): void => {}
+
+// optional parameters of the target type without corresponding 
+//parameters in the source type are not an error.
+interface ExtraTarget {
+  (optionalX: string, extraOptionalX: string): void
+}
+var extraTarget: ExtraTarget = (x: string, y: string, z?: string): void => {}
+
+
+//====================================================
+//  Function with overloads
+//====================================================
+// each overload in the source type must be matched by the compatible
+//signature on the target type.
+
+
