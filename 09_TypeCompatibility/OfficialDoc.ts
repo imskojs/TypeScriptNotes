@@ -112,3 +112,66 @@ var extraTarget: ExtraTarget = (x: string, y: string, z?: string): void => {}
 //signature on the target type.
 
 
+
+//====================================================
+//  Enums
+//====================================================
+// Enums are compatible with numbers vice versa
+enum Status {
+  Ready, Waiting
+}
+let statusy: number = Status.Ready;
+let statusy2: Status = 3;
+
+// Enum values from different enum types are incompatible.
+enum Colory {
+  Red, Gree, Blue
+}
+let statusy3: Status = Color.Gree; // error
+
+//====================================================
+//  Classes
+//====================================================
+// Only members of the instance are compared. That is static members
+//and constructors do not affect compatibility
+class Animalyz {
+  feet: number;
+  constructor(name: string, numFeet: number) {
+  }
+}
+class Size {
+  feet: number;
+  constructor(numFeet: number) {
+  }
+}
+let ay: Animalyz;
+let s: Size;
+ay = s // Ok
+s = ay // Ok
+
+// If the instance contains a private member, then the target type must
+//also contain a private member that originated from the same class. Likewise, the same applies for an instance with a protected member
+
+
+//====================================================
+//  Generics
+//====================================================
+// Generic type that has its type arguments specified acts just like
+//a non-generic type. 
+interface NotEmpty<T> {
+  data: T;
+}
+let x11: NotEmpty<number>;
+let y11: NotEmpty<string>;
+x11 = y11 // number is not compatible with string
+
+// Generic type that do not have their type arguments specified,
+//compatibility is checked by specifying any in place of all
+//unspecified type arguments
+let identity1 = function<T>(x: T): T{
+  return x;
+}
+let identity2 = function<U>(x: U): U {
+  return x;
+}
+identity1 = identity2; // (x: any)=> any matches (y:any)=> any
