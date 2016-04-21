@@ -93,8 +93,74 @@ if (padder instanceof StringPadder) {
   padder; // type narrowed to 'StringPadder'
 }
 
-
 //====================================================
 //  Intersection Types
 //====================================================
+// Contains all members of intersection
+// Returns an object containing all members of first: T, and second: U
+function extend<T, U>(first: T, second: U): T & U {
+  let result = <T & U>{};
+  for (let key in first) { // key has implicit any type
+    // key with any type must be used in object with type any.
+    (<any>result)[key] = (<any>first)[key];
+  }
+  for (let key in second) {
+    (<any>result)[key] = (<any>second)[key];
+  }
+  return result;
+}
+
+
+//====================================================
+//  Type Aliases
+//====================================================
+// Type aliases cannot be extended.
+// Does not create new type, it merely references the type.
+// It can be used as a form of documentation
+type Name = string;
+type NameFunc = () => string;
+type NameOrResolver = Name | NameFunc;
+
+// type alias can also be generic
+type Container<T> = { value: T };
+
+// type alias cannot appear anywhere else on the right side of the
+//declaration,
+type Yikes = Array<Yikes>; //error
+// unless it's a value of a property
+type Tree<T> = {
+  value: T;
+  left: Tree<T>;
+  right: Tree<T>;
+}
+
+// String literal types
+type Easing = "ease-in" | "ease-out" | "ease-in-out";
+
+
+//====================================================
+//  Polymorphic this types (F-bounded polymorphism)
+//====================================================
+// A polymorphic this type represents a type that is the subtype of
+//the containing class or interface.
+class BasicCalculator {
+  multiply(): this {
+    return this;
+  }
+}
+class ScientificCalculator extends BasicCalculator {
+  sin(): this {
+    return this;
+  }
+}
+// `this` in multiply when called in the context of ScientificaCalculator
+//returns ScientificCalculator eventhough multiply is a method of
+//BasicCalculator.
+new ScientificCalculator()
+  .multiply()
+  .sin();
+
+
+
+
 
