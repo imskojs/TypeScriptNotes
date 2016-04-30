@@ -55,6 +55,15 @@ export * from './SomeFile3';
 import * as Some123 from './AboveFile'
 
 //====================================================
-//  TODO export = and import = require()
+// Importing and exporting node modules.
 //====================================================
+// TypeScript supports `export =` to model the traditional
+//CommonJS workflow
+// The `export =` syntax specifies a single object that is
+//exported from the module.
+class Whatever {
+}
+export = Whatever; // same as module.export = Whatever
+import Whatever = require('./Whatever');
+export let test = 'method1'; // same as exports.test = 'method1'
 
