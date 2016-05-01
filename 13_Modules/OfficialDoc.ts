@@ -57,6 +57,8 @@ import * as Some123 from './AboveFile'
 //====================================================
 // Importing and exporting node modules.
 //====================================================
+// Note Depending on TypeScript compiler settings `export` and `import`
+//gets transpiled to different JavaScript code.
 // TypeScript supports `export =` to model the traditional
 //CommonJS workflow
 // The `export =` syntax specifies a single object that is
@@ -66,4 +68,30 @@ class Whatever {
 export = Whatever; // same as module.export = Whatever
 import Whatever = require('./Whatever');
 export let test = 'method1'; // same as exports.test = 'method1'
+
+
+//====================================================
+//  Ambient Modules
+//====================================================
+// Provide typings for already existing modules, for import and
+//export.
+// in .d.ts
+// note the string module name, this is needed for require.
+// Non-string values are used for normal `import {} from '...'`
+declare module 'url'{
+  interface Url {
+    protocol?: string;
+  }
+  // same as defining exports.parse
+  // later import 'url' will have url.parse
+  export function parse(url: string): Url;
+}
+import url = require('url');
+url.parse('stringy');
+
+//====================================================
+//  Guidance for structuring modules
+//====================================================
+//https://www.typescriptlang.org/docs/handbook/modules.html
+
 
